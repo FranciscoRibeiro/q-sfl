@@ -16,6 +16,7 @@ import org.apache.maven.project.MavenProject;
 import pt.up.fe.qsfl.common.messaging.Server;
 import pt.up.fe.qsfl.common.messaging.Service;
 import pt.up.fe.qsfl.instrumenter.agent.AgentConfigs;
+import pt.up.fe.qsfl.instrumenter.granularity.GranularityFactory.GranularityLevel;
 import pt.up.fe.qsfl.maven.service.InstrumentationRecorderService;
 
 @Mojo(name = "init")
@@ -34,6 +35,9 @@ public class InitMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "false")
 	protected boolean valueProbes;
+
+	@Parameter(defaultValue = "method")
+	protected GranularityLevel granularity;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -61,6 +65,7 @@ public class InitMojo extends AbstractMojo {
 			} else {
 				agentConfigs.setInstrumentLandmarks(true);
 			}
+			agentConfigs.setGranularityLevel(granularity);
 			agentConfigs.addPrefixToFilter("org.apache.maven.", "junit.", "org.junit.", "org.hamcrest.", "org.mockito.");
 
 			StringBuilder sb = new StringBuilder();
