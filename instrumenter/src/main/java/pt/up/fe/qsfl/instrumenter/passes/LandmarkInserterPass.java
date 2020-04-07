@@ -27,6 +27,8 @@ import pt.up.fe.qsfl.instrumenter.model.NodeRetriever;
 import pt.up.fe.qsfl.instrumenter.runtime.Collector;
 import pt.up.fe.qsfl.instrumenter.runtime.ProbeGroup.HitProbe;
 
+import static pt.up.fe.qsfl.instrumenter.passes.PassUtils.allLocalVars;
+
 public class LandmarkInserterPass implements Pass {
 
     public static final String LANDMARK_VECTOR_NAME = "$__QSFL_LANDMARK_VECTOR__";
@@ -105,6 +107,7 @@ public class LandmarkInserterPass implements Pass {
         Collector collector = Collector.instance();
 
         LocalVariableAttribute attr = (LocalVariableAttribute) ca.getAttribute(LocalVariableAttribute.tag);
+        String[] localVarNames = allLocalVars(attr);
         CtClass[] params = b.getParameterTypes();
         Object[][] paramsAnnotations = b.getAvailableParameterAnnotations();
         int pos = (Modifier.isStatic(b.getModifiers()) || skipMemberParameter) ? 0 : 1;
@@ -113,7 +116,7 @@ public class LandmarkInserterPass implements Pass {
         for (; i < params.length; i++) {
             String parameterName = "parameter#"+i;
             if (attr != null && attr.tableLength() > i + pos) {
-                parameterName = attr.variableName(i + pos);
+                parameterName = localVarNames[i + pos];
             }
             Node parameterNode = collector.createNode(n, parameterName, Type.PARAMETER, n.getLine());
 
