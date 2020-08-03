@@ -39,6 +39,9 @@ public class InitMojo extends AbstractMojo {
 	@Parameter(defaultValue = "method")
 	protected GranularityLevel granularity;
 
+	@Parameter
+	protected String[] ignorePackages;
+
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -67,6 +70,9 @@ public class InitMojo extends AbstractMojo {
 			}
 			agentConfigs.setGranularityLevel(granularity);
 			agentConfigs.addPrefixToFilter("org.apache.maven.", "junit.", "org.junit.", "org.hamcrest.", "org.mockito.");
+			if(ignorePackages != null){
+				agentConfigs.addPrefixToFilter(ignorePackages);
+			}
 
 			StringBuilder sb = new StringBuilder();
 			sb.append(project.getProperties().getProperty("argLine", ""));
