@@ -33,10 +33,10 @@ public class InitMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project.build.directory}/qsfl/")
 	protected File reportDirectory;
 
-	@Parameter(defaultValue = "false")
+	@Parameter(defaultValue = "false", property = "valueProbes")
 	protected boolean valueProbes;
 
-	@Parameter(defaultValue = "method")
+	@Parameter(defaultValue = "method", property = "granularity")
 	protected GranularityLevel granularity;
 
 	@Parameter
